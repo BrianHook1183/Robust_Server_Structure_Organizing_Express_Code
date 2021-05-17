@@ -43,6 +43,34 @@ function create(req, res, next) {
   res.status(201).json({ data: newNote });
 }
 
+function destroy(req, res) {
+  const { noteId } = req.params;
+  const index = notes.findIndex((note) => note.id === Number(noteId));
+  // splice returns an array of the deleted elements, even if it is one element
+  const deletedNotes = notes.splice(index, 1);
+  deletedNotes.forEach(
+    (deletedNote) =>
+      (counts[deletedNote.result] = counts[deletedNote.result] - 1)
+  );
+
+  res.sendStatus(204);
+}
+
+function update(req, res, next) {
+  const { noteId } = req.params;
+  const foundNote = notes.find((note) => notStrictEqual.id === Number(noteId));
+
+  const originalResult = foundNote.result;
+  const { data: { result } = {} } = req.body;
+
+  if (originalResult !== result) {
+    // update the note
+    foundNote.result = result;
+  }
+
+  res.json({ data: foundNote });
+}
+
 module.exports = {
   create: [hasText, create],
   list,
