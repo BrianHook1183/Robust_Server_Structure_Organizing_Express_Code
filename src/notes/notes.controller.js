@@ -58,7 +58,7 @@ function destroy(req, res) {
 
 function update(req, res, next) {
   const { noteId } = req.params;
-  const foundNote = notes.find((note) => notStrictEqual.id === Number(noteId));
+  const foundNote = notes.find((note) => note.id === Number(noteId));
 
   const originalResult = foundNote.result;
   const { data: { result } = {} } = req.body;
