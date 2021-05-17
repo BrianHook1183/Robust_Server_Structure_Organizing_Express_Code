@@ -1,9 +1,6 @@
 const path = require("path");
 const notes = require(path.resolve("src/data/notes-data"));
 
-
-
-
 const noteExists = (req, res, next) => {
   const noteId = Number(req.params.noteId);
   const foundNote = notes.find((note) => note.id === noteId);
@@ -17,22 +14,15 @@ const noteExists = (req, res, next) => {
   }
 };
 
-
-app.get("/notes/:noteId", noteExists, (req, res, next) => {
+function read(req, res, next) {
   const noteId = Number(req.params.noteId);
   const foundNote = notes.find((note) => note.id === noteId);
   res.json({ data: foundNote });
-});
+}
 
-app.get("/notes", (req, res) => {
+function list(req, res) {
   res.json({ data: notes });
-});
-
-
-
-
-
-
+}
 
 const hasText = (req, res, next) => {
   const { data: { text } = {} } = req.body;
@@ -42,7 +32,7 @@ const hasText = (req, res, next) => {
   return next({ status: 400, message: "A 'text' property is required." });
 };
 
-app.post("/notes", hasText, (req, res, next) => {
+function create(req, res, next) {
   const { data: { text } = {} } = req.body;
 
   const newNote = {
@@ -51,16 +41,7 @@ app.post("/notes", hasText, (req, res, next) => {
   };
   notes.push(newNote);
   res.status(201).json({ data: newNote });
-});
-
-
-
-
-
-
-
-
-
+}
 
 module.exports = {
   create: [hasText, create],
