@@ -6,7 +6,6 @@ app.use(express.json());
 
 app.use("/notes", notesRouter);
 
-
 // Not found handler
 app.use((req, res, next) => {
   return next({ status: 404, message: `Not found: ${req.originalUrl}` });
